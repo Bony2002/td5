@@ -7,8 +7,6 @@ using namespace std;
 #include <algorithm>
 
 
-
-
 int sumas_distintas(int n){
     vector<int> memoria(n+1,0);
     memoria[1]=1;
@@ -68,17 +66,35 @@ void reconstruccion(vector<int> precios, vector<int> longitudes, int precio,int 
         }
     }
 }
+
+int barrasBU(vector<int> precios,vector<int> longitudes,int n){
+    vector<int> memoria(n+1,0);
+    int lon=1;
+    while (lon<memoria.size()){
+        vector<int> aux={};
+        int i=0;
+        while(i<longitudes.size()){
+            int diferencia=lon-longitudes[i];
+            if((diferencia)>=0){
+                aux.emplace_back(memoria[diferencia]+precios[i]);
+            }
+            i+=1;
+        }
+        int maximo=valormax(aux);
+        memoria[lon]=maximo;
+        lon+=1;
+    }
+    return memoria[n];
+}
 int main(){
     vector<int> longitudes = {2,3,5};
     vector<int> precios = {80,140,170};
     int n = 10;
     vector<int> memo(n+1, -1);
     int precio=barras(precios, longitudes, memo, n);
-    cout << precio<< endl;
+    int precioBU=barrasBU(precios,longitudes,n);
+    cout << precioBU<< endl;
     vector<int> solucion;
-    reconstruccion(precios,longitudes,precio,n,0,{},solucion);
-    for (int i:solucion){
-        cout<<i<<endl;
-    }
+    reconstruccion(precios,longitudes,precioBU,n,0,{},solucion);
 }
 
